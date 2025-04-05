@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -78,10 +77,24 @@
   }
   
   .action-item {
-    @apply bg-action/10 border-l-4 border-action px-4 py-3 rounded-r-md my-2;
+    @apply bg-action/10 border-l-4 border-action px-4 py-3 rounded-r-md my-2 text-foreground;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  .decision-item {
+    @apply bg-secondary/50 px-4 py-3 rounded-md my-2 text-foreground;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  .question-item {
+    @apply bg-muted/50 px-4 py-3 rounded-md my-2 text-foreground;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
   
   .summary-item {
-    @apply bg-secondary/50 px-4 py-3 rounded-md my-2;
+    @apply bg-secondary/50 px-4 py-3 rounded-md my-2 text-foreground;
   }
 }

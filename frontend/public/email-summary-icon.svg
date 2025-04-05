@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Email envelope -->
+  <rect x="64" y="128" width="384" height="256" rx="16" fill="#3b82f6" />
+  <path d="M64 144l192 128 192-128" stroke="#ffffff" stroke-width="24" fill="none" />
+  
+  <!-- Summary document overlay -->
+  <rect x="320" y="192" width="96" height="128" rx="8" fill="#ffffff" />
+  <rect x="336" y="208" width="64" height="8" rx="4" fill="#3b82f6" />
+  <rect x="336" y="232" width="48" height="8" rx="4" fill="#3b82f6" />
+  <rect x="336" y="256" width="56" height="8" rx="4" fill="#3b82f6" />
+  <rect x="336" y="280" width="40" height="8" rx="4" fill="#3b82f6" />
+</svg> 
