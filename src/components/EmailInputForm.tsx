@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { FileUp, Mail, HelpCircle } from 'lucide-react';
+import { FileUp, Mail, HelpCircle, Save, Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useToast } from '@/hooks/use-toast';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import ThemeToggle from './ThemeToggle';
 
 interface EmailInputFormProps {
   onSubmit: (emailText: string) => void;
@@ -14,6 +17,8 @@ const EmailInputForm: React.FC<EmailInputFormProps> = ({ onSubmit }) => {
   const [emailText, setEmailText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
+  const { toast } = useToast();
+  const [savedEmail, setSavedEmail] = useLocalStorage<string>('savedEmail', '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +83,50 @@ Jane
     setEmailText(exampleEmail);
   };
 
+  const handleSaveEmail = () => {
+    if (!emailText.trim()) {
+      toast({
+        title: "Nothing to save",
+        description: "Please enter an email thread first",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setSavedEmail(emailText);
+    toast({
+      title: "Email thread saved",
+      description: "Your email thread has been saved locally",
+    });
+  };
+
+  const handleLoadSavedEmail = () => {
+    if (!savedEmail) {
+      toast({
+        title: "No saved email",
+        description: "You haven't saved any email thread yet",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setEmailText(savedEmail);
+    toast({
+      title: "Email thread loaded",
+      description: "Your saved email thread has been loaded",
+    });
+  };
+
+  const handleClearEmail = () => {
+    if (!emailText.trim()) return;
+    
+    setEmailText('');
+    toast({
+      title: "Email thread cleared",
+      description: "Your email thread has been cleared",
+    });
+  };
+
   return (
     <Card className="w-full max-w-3xl mx-auto shadow-lg animate-fade-in">
       <CardHeader>
@@ -86,18 +135,21 @@ Jane
             <Mail className="h-6 w-6 text-primary" />
             <CardTitle>Email Thread Summarizer</CardTitle>
           </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <HelpCircle className="h-5 w-5 text-muted-foreground" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="max-w-sm">
-                <p>Paste your email thread or upload a text file. We'll analyze the conversation and extract the key points and action items.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <HelpCircle className="h-5 w-5 text-muted-foreground" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-sm">
+                  <p>Paste your email thread or upload a text file. We'll analyze the conversation and extract the key points and action items.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
         <CardDescription>
           Paste your email thread or upload a text file to get a concise summary and action items
@@ -113,8 +165,8 @@ Jane
               onChange={(e) => setEmailText(e.target.value)}
             />
             
-            <div className="flex flex-col sm:flex-row gap-2 items-center">
-              <div className="relative w-full sm:w-auto">
+            <div className="flex flex-wrap gap-2 items-center">
+              <div className="relative">
                 <input
                   type="file"
                   accept=".txt"
@@ -125,7 +177,6 @@ Jane
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full sm:w-auto"
                 >
                   <FileUp className="mr-2 h-4 w-4" />
                   Upload File
@@ -135,10 +186,40 @@ Jane
               <Button
                 type="button"
                 variant="outline"
-                className="w-full sm:w-auto"
                 onClick={handleUseExample}
               >
                 Use Example
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleSaveEmail}
+                title="Save email thread"
+              >
+                <Save className="mr-2 h-4 w-4" />
+                Save
+              </Button>
+              
+              {savedEmail && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleLoadSavedEmail}
+                  title="Load saved email thread"
+                >
+                  Load Saved
+                </Button>
+              )}
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleClearEmail}
+                title="Clear email thread"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Clear
               </Button>
             </div>
             
@@ -151,7 +232,6 @@ Jane
           <Button 
             type="submit" 
             disabled={!emailText.trim() || isLoading}
-            className="w-full sm:w-auto"
           >
             {isLoading ? "Processing..." : "Summarize Thread"}
           </Button>

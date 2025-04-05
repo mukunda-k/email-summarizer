@@ -9,11 +9,11 @@ interface InfoCardProps {
 
 const InfoCard: React.FC<InfoCardProps> = ({ className }) => {
   return (
-    <Card className={`shadow-md bg-secondary/30 ${className}`}>
+    <Card className={`shadow-md bg-secondary/30 dark:bg-secondary/20 transition-colors duration-300 ${className}`}>
       <CardContent className="pt-6">
         <div className="flex flex-col space-y-4">
           <div className="flex items-start space-x-3">
-            <div className="bg-primary/10 p-2 rounded-full">
+            <div className="bg-primary/10 p-2 rounded-full dark:bg-primary/20">
               <FileText className="h-4 w-4 text-primary" />
             </div>
             <div>
@@ -27,7 +27,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ className }) => {
           </div>
           
           <div className="flex items-start space-x-3">
-            <div className="bg-primary/10 p-2 rounded-full">
+            <div className="bg-primary/10 p-2 rounded-full dark:bg-primary/20">
               <CheckSquare className="h-4 w-4 text-primary" />
             </div>
             <div>
